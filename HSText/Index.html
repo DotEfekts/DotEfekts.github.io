@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+		<meta http-equiv="content-type-style" content="text/css" />
+		<meta name="author" content="Jack Pritchard" />
+		<title>
+			Seizure Warning
+		</title>
+		<script type="text/javascript">
+			var flashNum = 0;
+			var flashCode = new Array();
+
+			function start() {
+				var vers = parseURLParams();
+				var text = vers["text"];
+				document.getElementById("text").innerHTML = text;
+				document.getElementById("atext").innerHTML = text;
+				flashCode[0] = "ff0";
+				flashCode[1] = "0f0";
+				flashCode[2] = "0ff";
+				flashCode[3] = "00f";
+				flashCode[4] = "f0f";
+				flashCode[5] = "f00";
+				setInterval(function(){flash()},20);
+			}
+
+
+			function parseURLParams() {
+			  var url = window.location.href;
+			  var queryStart = url.indexOf("?") + 1;
+			  var queryEnd   = url.indexOf("#") + 1 || url.length + 1;
+			  var query      = url.slice(queryStart, queryEnd - 1);
+
+			  if (query === url || query === "") return;
+
+			  var params  = {};
+			  var nvPairs = query.replace(/\+/g, " ").split("&");
+
+			  for (var i=0; i<nvPairs.length; i++) {
+				var nv = nvPairs[i].split("=");
+				var n  = decodeURIComponent(nv[0]);
+				var v  = decodeURIComponent(nv[1]);
+				if ( !(n in params) ) {
+				  params[n] = [];
+				}
+				params[n].push(nv.length === 2 ? v : null);
+			  }
+			  return params;
+			}
+
+			function flash() {
+				document.getElementById("atext").style.color = "#" + flashCode[flashNum];
+				document.getElementById("atext").style.textShadow = "2px 2px 0 #" + flashCode[flashNum] + ", -2px -2px 0 #" + flashCode[flashNum] + ", 2px -2px 0 #" + flashCode[flashNum] + ", -2px 2px 0 #" + flashCode[flashNum];
+				flashNum++;
+				if(flashNum > 5) flashNum = 0;
+			}
+		</script>
+		<style type="text/css">
+			@font-face {
+				font-family: block;
+				src: url('1982.ttf');
+			}
+
+			@font-face {
+				font-family: blockin;
+				src: url('1982in.ttf');
+			}
+
+			html, body {
+				font-family: block;
+				font-size:72px;
+			}
+
+			#text {
+				display:inline-block;
+				position:absolute;
+				padding:5px;
+				top:5px;
+				left:5px;
+				z-index:100;
+				float:left;
+			}
+
+			#atext {
+				font-family: blockin;
+				position:absolute;
+				padding:5px;
+				top:5px;
+				left:5px;
+				z-index:-1;
+				color:#ff0;
+				text-shadow:2px 2px 0 #ff0, -2px -2px 0 #ff0, 2px -2px 0 #ff0, -2px 2px 0 #ff0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="text"></div>
+		<div id="atext"></div>
+		<script type="text/javascript">start();</script>
+	</body>
+</html>
